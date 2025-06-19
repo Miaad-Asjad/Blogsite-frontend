@@ -1,5 +1,4 @@
 
-
 import { useState, useEffect } from 'react';
 import axiosInstance from '../utils/axiosInstance'; 
 import CategoriesList from '../components/CategoriesList';
@@ -89,7 +88,7 @@ const HomePage = () => {
               ))}
             </div>
 
-            {/* Categories Section */}
+            
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}

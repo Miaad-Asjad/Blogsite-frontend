@@ -19,10 +19,11 @@ const BlogForm = ({
     const fetchCategories = async () => {
       try {
         setLoadingCategories(true);
-        const res = await axios.get("/api/categories");
+        const res = await axiosInstance.get("/api/categories");
         setCategories(res.data);
-      } catch {
-        setError("Failed to load categories.");
+      } catch (error) {
+  console.error("Category fetch error:", error);
+  setError("Failed to load categories. Please try again later.");
       } finally {
         setLoadingCategories(false);
       }
@@ -81,7 +82,7 @@ const BlogForm = ({
         />
 
         <Editor
-          apiKey="h6vhi4krb2sxmiu4at15irfp2uhyw06ftk2ioztlcj7piahd"
+          apiKey="h6vhi4krb2sxmiu4at15irfp2uhyw06ftk2ioztlcj7piah"
           value={formData.description}
           onEditorChange={(content) =>
             setFormData((prev) => ({ ...prev, description: content }))
@@ -112,7 +113,7 @@ const BlogForm = ({
               "undo redo | formatselect | bold italic | " +
               "alignleft aligncenter alignright alignjustify | " +
               "bullist numlist outdent indent | image | removeformat | help",
-            images_upload_url: "http://localhost:5000/api/blogs/upload-image",
+            images_upload_url: `${import.meta.env.VITE_API_BASE_URL}/blogs/upload-image`,
             images_upload_credentials: true,
             automatic_uploads: true,
             file_picker_types: "image",

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 import axiosInstance from "../utils/axiosInstance";
 import { FaCamera } from "react-icons/fa";
 import { toast } from "react-hot-toast";
@@ -20,10 +20,12 @@ function RegisterPage() {
     window.scrollTo(0, 0);
   }, []);
 
+  
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -39,77 +41,79 @@ function RegisterPage() {
   };
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
-  setIsSubmitting(true);
+    e.preventDefault();
+    setIsSubmitting(true);
 
-  const { name, username, email, password } = formData;
-  const trimmedName = name.trim();
-  const trimmedUsername = username.trim();
-  const trimmedEmail = email.trim().toLowerCase();
-  const trimmedPassword = password.trim();
+    const { name, username, email, password } = formData;
+    const trimmedName = name.trim();
+    const trimmedUsername = username.trim();
+    const trimmedEmail = email.trim().toLowerCase();
+    const trimmedPassword = password.trim();
 
-  // Validation
-  if (!trimmedName || !trimmedUsername || !trimmedEmail || !trimmedPassword) {
-    toast.error("Please fill in all fields.");
-    setIsSubmitting(false);
-    return;
-  }
+    
+    if (!trimmedName || !trimmedUsername || !trimmedEmail || !trimmedPassword) {
+      toast.error("Please fill in all fields.");
+      setIsSubmitting(false);
+      return;
+    }
 
-  if (!/^[a-zA-Z0-9_]+$/.test(trimmedUsername)) {
-    toast.error("Username can only contain letters, numbers, and underscores.");
-    setIsSubmitting(false);
-    return;
-  }
+    if (!/^[a-zA-Z0-9_]+$/.test(trimmedUsername)) {
+      toast.error("Username can only contain letters, numbers, and underscores.");
+      setIsSubmitting(false);
+      return;
+    }
 
-  if (!/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(trimmedEmail)) {
-    toast.error("Please enter a valid email address.");
-    setIsSubmitting(false);
-    return;
-  }
+    if (!/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(trimmedEmail)) {
+      toast.error("Please enter a valid email address.");
+      setIsSubmitting(false);
+      return;
+    }
 
-  if (trimmedPassword.length < 6) {
-    toast.error("Password must be at least 6 characters long.");
-    setIsSubmitting(false);
-    return;
-  }
+    if (trimmedPassword.length < 6) {
+      toast.error("Password must be at least 6 characters long.");
+      setIsSubmitting(false);
+      return;
+    }
 
-  const formDataToSubmit = new FormData();
-  formDataToSubmit.append("name", trimmedName);
-  formDataToSubmit.append("username", trimmedUsername);
-  formDataToSubmit.append("email", trimmedEmail);
-  formDataToSubmit.append("password", trimmedPassword);
-  if (profileImage) {
-    formDataToSubmit.append("profilePicture", profileImage);
-  }
+  
+    const formDataToSubmit = new FormData();
+    formDataToSubmit.append("name", trimmedName);
+    formDataToSubmit.append("username", trimmedUsername);
+    formDataToSubmit.append("email", trimmedEmail);
+    formDataToSubmit.append("password", trimmedPassword);
+    if (profileImage) {
+      formDataToSubmit.append("profilePicture", profileImage);
+    }
 
-  try {
-    const response = await axiosInstance.post("/api/auth/register", formDataToSubmit, {
-      headers: {
-        "Content-Type": "multipart/form-data", 
-      },
-    });
+    try {
+      const response = await axiosInstance.post("/api/auth/register", formDataToSubmit, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
 
-    const { userId } = response.data;
+      const { userId } = response.data;
 
-    toast.success("Verification code sent to your email!");
+      toast.success("Verification code sent to your email!");
 
-    localStorage.setItem("pendingEmail", trimmedEmail);
-    localStorage.setItem("pendingUserId", userId);
+      
+      localStorage.setItem("pendingEmail", trimmedEmail);
+      localStorage.setItem("pendingUserId", userId);
 
-    navigate("/verify", {
-      state: {
-        userId,
-        email: trimmedEmail,
-      },
-    });
-  } catch (error) {
-    toast.error(error.response?.data?.message || "Registration failed. Please try again.");
-    console.error("Error during registration:", error);
-  } finally {
-    setIsSubmitting(false);
-  }
-};
-
+      
+      navigate("/verify", {
+        state: {
+          userId,
+          email: trimmedEmail,
+        },
+      });
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Registration failed. Please try again.");
+      console.error("Error during registration:", error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <motion.div
@@ -129,7 +133,7 @@ function RegisterPage() {
         </h2>
 
         <form onSubmit={handleSubmit}>
-          {/* Name */}
+          {/* Full Name */}
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
@@ -147,7 +151,7 @@ function RegisterPage() {
             />
           </motion.div>
 
-          {/* Username */}
+         
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
@@ -165,7 +169,7 @@ function RegisterPage() {
             />
           </motion.div>
 
-          {/* Email */}
+          
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
@@ -183,7 +187,7 @@ function RegisterPage() {
             />
           </motion.div>
 
-          {/* Password */}
+         
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
@@ -202,7 +206,7 @@ function RegisterPage() {
             />
           </motion.div>
 
-          {/* Profile Image */}
+          
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
@@ -233,17 +237,19 @@ function RegisterPage() {
                   src={URL.createObjectURL(profileImage)}
                   alt="Profile Preview"
                   className="w-24 h-24 rounded-full object-cover border"
+                  onLoad={(e) => URL.revokeObjectURL(e.target.src)}
                 />
               </div>
             )}
           </motion.div>
 
-          {/* Submit */}
+          
           <motion.button
             type="submit"
             disabled={isSubmitting}
-            className={`w-full py-3 rounded-lg font-semibold transition duration-300 
-              ${isSubmitting ? 'bg-blue-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700 text-white'}`}
+            className={`w-full py-3 rounded-lg font-semibold transition duration-300 ${
+              isSubmitting ? "bg-blue-400 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700 text-white"
+            }`}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.7, delay: 0.7 }}
@@ -266,4 +272,5 @@ function RegisterPage() {
 }
 
 export default RegisterPage;
+
 

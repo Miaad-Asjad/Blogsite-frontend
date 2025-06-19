@@ -50,12 +50,12 @@ const PostPage = () => {
         transition={{ duration: 0.6 }}
         className="max-w-4xl mx-auto bg-white rounded-lg shadow-lg p-6 sm:p-10"
       >
-        {/* Blog Title */}
+        
         <h1 className="text-4xl sm:text-5xl font-extrabold text-gray-900 mb-6 leading-tight">
           {blog.title}
         </h1>
 
-        {/* Author & Date */}
+       
         <div className="flex flex-wrap items-center text-sm sm:text-base text-gray-600 mb-8 gap-2">
           <span>By <span className="font-semibold">{blog.author?.name || 'Anonymous'}</span></span>
           <span>•</span>
@@ -72,7 +72,7 @@ const PostPage = () => {
           )}
         </div>
 
-        {/* Blog Image */}
+        
         {blog.image && (
           <img
             src={`${import.meta.env.VITE_API_BASE_URL}/uploads/${blog.image}`}
@@ -81,7 +81,7 @@ const PostPage = () => {
           />
         )}
 
-        {/* Blog Content */}
+        
         <article
           className="prose prose-lg max-w-none text-gray-800 leading-relaxed"
           dangerouslySetInnerHTML={{ __html: blog.description }}
@@ -89,12 +89,12 @@ const PostPage = () => {
 
       </motion.div>
 
-      {/* Comments Section */}
+      
       <div className="max-w-4xl mx-auto mt-12">
         <CommentSection blogId={blog._id} />
       </div>
 
-      {/* Footer */}
+     
       <div className="mt-16">
         <Footer />
       </div>

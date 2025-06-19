@@ -9,13 +9,13 @@ import axiosInstance from "../utils/axiosInstance";
 const Login = () => {
   const [formData, setFormData] = useState({ emailOrUsername: "", password: "" });
   const [loading, setLoading] = useState(false);
-  const [formError, setFormError] = useState(""); // 👈 Error state
+  const [formError, setFormError] = useState(""); 
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormError(""); // 👈 Clear error when user types
+    setFormError(""); 
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 

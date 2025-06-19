@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import { axiosInstance } from "../utils";
 import moment from "moment";
 
+const baseURL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
 const CommentSection = ({ blogId }) => {
   const [comment, setComment] = useState("");
   const [comments, setComments] = useState([]);
@@ -12,6 +13,7 @@ const CommentSection = ({ blogId }) => {
   const [editedText, setEditedText] = useState("");
 
   const { user, accessToken: token } = useSelector((state) => state.auth);
+
 
   const fetchComments = async () => {
     setLoading(true);
@@ -80,12 +82,14 @@ const CommentSection = ({ blogId }) => {
     }
   };
 
-  const getProfilePicture = (profilePicture) => {
-    if (!profilePicture) return "/default-profile.png";
-    return profilePicture.startsWith("http")
-      ? profilePicture
-      : `http://localhost:5000/uploads/${profilePicture}`;
-  };
+
+const getProfilePicture = (profilePicture) => {
+  if (!profilePicture) return "/default-profile.png";
+  return profilePicture.startsWith("http")
+    ? profilePicture
+    : `${baseURL}/uploads/${profilePicture}`;
+};
+
 
   useEffect(() => {
     fetchComments();

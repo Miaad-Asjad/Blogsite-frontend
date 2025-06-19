@@ -1,7 +1,9 @@
-import  { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { axiosInstance } from '../utils/axiosInstance'; 
+import axiosInstance from '../utils/axiosInstance';
 import CommentSection from '../components/CommentSection';
+
+const baseURL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
 
 const SingleBlogPage = () => {
   const { id } = useParams();
@@ -11,7 +13,6 @@ const SingleBlogPage = () => {
   useEffect(() => {
     const fetchBlog = async () => {
       try {
-       
         const res = await axiosInstance.get(`/blogs/${id}`);
         setBlog(res.data);
       } catch (err) {
@@ -28,14 +29,12 @@ const SingleBlogPage = () => {
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-10">
-      {/* Blog Title */}
       <h1 className="text-4xl font-bold text-gray-800 mb-3">{blog.title}</h1>
 
-      {/* Author Info */}
       <div className="flex items-center gap-3 text-sm text-gray-500 mb-4">
         {blog.author?.profilePic && (
           <img
-            src={blog.author.profilePic}
+            src={`${baseURL}/uploads/${blog.author.profilePic}`}
             alt={blog.author.name}
             className="w-8 h-8 rounded-full object-cover"
           />
@@ -45,21 +44,19 @@ const SingleBlogPage = () => {
         <span>{new Date(blog.createdAt).toLocaleDateString()}</span>
       </div>
 
-      {/* Blog Image */}
       {blog.image && (
         <img
-          src={blog.image}
+          src={`${baseURL}/uploads/${blog.image}`}
           alt={blog.title}
           className="w-full h-80 object-cover rounded-lg mb-6"
         />
       )}
 
-      {/* Blog Content */}
-      <div className="prose max-w-none prose-lg text-gray-800 leading-relaxed">
-        {blog.content}
-      </div>
+      <div
+        className="prose max-w-none prose-lg text-gray-800 leading-relaxed"
+        dangerouslySetInnerHTML={{ __html: blog.content }}
+      />
 
-      {/* Comment Section */}
       <div className="mt-12">
         <CommentSection blogId={blog._id} />
       </div>

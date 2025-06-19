@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { logoutUser } from '../redux/authSlice';
 import { ChevronDown } from 'lucide-react';
 import axios from 'axios';
+import { axiosInstance } from '../utils';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -41,7 +42,7 @@ const Navbar = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const res = await axios.get(`${baseURL}/api/categories`);
+        const res = await axiosInstance.get(`/api/categories`)
         setCategories(res.data || []);
       } catch (err) {
         console.error('Failed to fetch categories:', err);
