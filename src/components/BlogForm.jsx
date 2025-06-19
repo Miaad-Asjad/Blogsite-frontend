@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Editor } from "@tinymce/tinymce-react";
-import axios from "axios";
+import  axiosInstance  from "../utils/axiosInstance";
+
 
 const BlogForm = ({
   formData,
@@ -82,7 +83,7 @@ const BlogForm = ({
         />
 
         <Editor
-          apiKey="h6vhi4krb2sxmiu4at15irfp2uhyw06ftk2ioztlcj7piah"
+          apiKey={import.meta.env.VITE_TINYMCE_API_KEY}
           value={formData.description}
           onEditorChange={(content) =>
             setFormData((prev) => ({ ...prev, description: content }))
