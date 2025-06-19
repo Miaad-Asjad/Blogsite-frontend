@@ -1,0 +1,170 @@
+import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
+import { Editor } from "@tinymce/tinymce-react";
+import axios from "axios";
+
+const BlogForm = ({
+  formData,
+  setFormData,
+  handleSubmit,
+  submitText,
+  formStatus,
+}) => {
+  const [filePreview, setFilePreview] = useState("");
+  const [categories, setCategories] = useState([]);
+  const [loadingCategories, setLoadingCategories] = useState(false);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        setLoadingCategories(true);
+        const res = await axios.get("/api/categories");
+        setCategories(res.data);
+      } catch {
+        setError("Failed to load categories.");
+      } finally {
+        setLoadingCategories(false);
+      }
+    };
+    fetchCategories();
+  }, []);
+
+  useEffect(() => {
+    if (formData.image) {
+      const url = URL.createObjectURL(formData.image);
+      setFilePreview(url);
+      return () => URL.revokeObjectURL(url);
+    }
+    setFilePreview("");
+  }, [formData.image]);
+
+  const handleChange = (e) => {
+    const { name, value, files } = e.target;
+    if (name === "image" && files.length > 0) {
+      const file = files[0];
+      if (file.size > 2 * 1024 * 1024) {
+        return;
+      }
+      setFormData((prev) => ({ ...prev, image: file }));
+    } else {
+      setFormData((prev) => ({ ...prev, [name]: value }));
+    }
+  };
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: -20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      className="w-full max-w-2xl mx-auto p-4 sm:p-6 bg-white shadow-md rounded-md"
+    >
+      {formStatus?.message && (
+        <div
+          className={`text-center font-medium text-sm mb-4 ${
+            formStatus.type === "success" ? "text-green-600" : "text-red-600"
+          }`}
+        >
+          {formStatus.message}
+        </div>
+      )}
+
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <input
+          type="text"
+          name="title"
+          value={formData.title}
+          onChange={handleChange}
+          placeholder="Enter title"
+          required
+          className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+
+        <Editor
+          apiKey="h6vhi4krb2sxmiu4at15irfp2uhyw06ftk2ioztlcj7piahd"
+          value={formData.description}
+          onEditorChange={(content) =>
+            setFormData((prev) => ({ ...prev, description: content }))
+          }
+          init={{
+            height: 300,
+            menubar: true,
+            plugins: [
+              "advlist",
+              "autolink",
+              "lists",
+              "link",
+              "image",
+              "charmap",
+              "preview",
+              "anchor",
+              "searchreplace",
+              "visualblocks",
+              "code",
+              "fullscreen",
+              "insertdatetime",
+              "media",
+              "table",
+              "help",
+              "wordcount",
+            ],
+            toolbar:
+              "undo redo | formatselect | bold italic | " +
+              "alignleft aligncenter alignright alignjustify | " +
+              "bullist numlist outdent indent | image | removeformat | help",
+            images_upload_url: "http://localhost:5000/api/blogs/upload-image",
+            images_upload_credentials: true,
+            automatic_uploads: true,
+            file_picker_types: "image",
+          }}
+        />
+
+        {loadingCategories ? (
+          <p className="text-gray-500 italic">Loading categories...</p>
+        ) : error ? (
+          <p className="text-red-500">{error}</p>
+        ) : (
+          <select
+            name="category"
+            value={formData.category}
+            onChange={handleChange}
+            required
+            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            <option value="">Select Category</option>
+            {categories.map((cat) => (
+              <option key={cat._id} value={cat.slug}>
+                {cat.name}
+              </option>
+            ))}
+          </select>
+        )}
+
+        <input
+          type="file"
+          name="image"
+          accept="image/*"
+          onChange={handleChange}
+          className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:border-0 file:text-sm file:font-semibold file:bg-blue-100 file:text-blue-700 hover:file:bg-blue-200"
+        />
+
+        {filePreview && (
+          <img
+            src={filePreview}
+            alt="Preview"
+            className="w-full h-52 object-cover rounded-md border"
+          />
+        )}
+
+        <button
+          type="submit"
+          className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md text-lg font-medium transition duration-200"
+        >
+          {submitText}
+        </button>
+      </form>
+    </motion.div>
+  );
+};
+
+export default BlogForm;
