@@ -75,7 +75,7 @@ const PostPage = () => {
         {/* Blog Image */}
         {blog.image && (
           <img
-            src={`http://localhost:5000/uploads/${blog.image}`}
+            src={`${import.meta.env.VITE_API_BASE_URL}/uploads/${blog.image}`}
             alt={blog.title}
             className="w-full h-auto rounded-md mb-8 object-cover max-h-96"
           />
