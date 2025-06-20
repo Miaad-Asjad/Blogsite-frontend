@@ -4,17 +4,17 @@ import axiosInstance from '../utils/axiosInstance';
 import BlogCard from '../components/BlogCard';
 import EditProfileForm from '../components/EditProfileForm';
 
+const baseURL =
+  window.location.hostname === 'localhost'
+    ? 'http://localhost:5000'
+    : import.meta.env.VITE_API_BASE_URL;
+
 const UserProfilePage = () => {
   const { userId } = useParams();
   const [user, setUser] = useState(null);
   const [blogs, setBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [editMode, setEditMode] = useState(false);
-
-  const isLocal = window.location.hostname === 'localhost';
-  const baseURL = isLocal
-    ? 'http://localhost:5000'
-    : import.meta.env.VITE_API_BASE_URL;
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -37,9 +37,9 @@ const UserProfilePage = () => {
 
   const getProfileImageURL = () => {
     if (!user?.profilePicture) return '/default-profile.png';
-    return user.profilePicture.startsWith('http')
-      ? user.profilePicture
-      : `${baseURL}/uploads/${user.profilePicture}`;
+
+    const filename = user.profilePicture.split('/').pop(); 
+    return `${baseURL}/uploads/${filename}`;
   };
 
   const handleProfileUpdated = (updatedUserData) => {
@@ -74,6 +74,7 @@ const UserProfilePage = () => {
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-10">
+      {/* User Info */}
       <div className="flex flex-col md:flex-row items-center gap-6 mb-10 border-b pb-6">
         <img
           src={getProfileImageURL()}
@@ -133,3 +134,4 @@ const UserProfilePage = () => {
 };
 
 export default UserProfilePage;
+
