@@ -11,7 +11,10 @@ const UserProfilePage = () => {
   const [loading, setLoading] = useState(true);
   const [editMode, setEditMode] = useState(false);
 
-  const baseURL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+  const isLocal = window.location.hostname === 'localhost';
+  const baseURL = isLocal
+    ? 'http://localhost:5000'
+    : import.meta.env.VITE_API_BASE_URL;
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -34,8 +37,9 @@ const UserProfilePage = () => {
 
   const getProfileImageURL = () => {
     if (!user?.profilePicture) return '/default-profile.png';
-    if (user.profilePicture.startsWith('http')) return user.profilePicture;
-    return `${baseURL}/uploads/${user.profilePicture}`;
+    return user.profilePicture.startsWith('http')
+      ? user.profilePicture
+      : `${baseURL}/uploads/${user.profilePicture}`;
   };
 
   const handleProfileUpdated = (updatedUserData) => {
@@ -70,7 +74,6 @@ const UserProfilePage = () => {
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-10">
-      {/* User Info */}
       <div className="flex flex-col md:flex-row items-center gap-6 mb-10 border-b pb-6">
         <img
           src={getProfileImageURL()}
@@ -108,7 +111,6 @@ const UserProfilePage = () => {
         </div>
       </div>
 
-      {/* Blogs */}
       <div>
         <h3 className="text-2xl font-semibold text-blue-600 mb-6">
           {blogs.length > 0

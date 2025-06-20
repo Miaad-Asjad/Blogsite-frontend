@@ -12,7 +12,10 @@ const EditProfileForm = ({ user, onProfileUpdated }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const baseURL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+  const isLocal = window.location.hostname === "localhost";
+  const baseURL = isLocal
+    ? "http://localhost:5000"
+    : import.meta.env.VITE_API_BASE_URL;
 
   useEffect(() => {
     if (user.profilePicture && typeof user.profilePicture === "string") {
@@ -139,4 +142,3 @@ const EditProfileForm = ({ user, onProfileUpdated }) => {
 };
 
 export default EditProfileForm;
-
