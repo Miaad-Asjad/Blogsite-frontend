@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { axiosInstance } from "../utils";
+import  axiosInstance  from "../utils/axiosInstance";
 import moment from "moment";
 
 const baseURL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
@@ -85,10 +85,12 @@ const CommentSection = ({ blogId }) => {
 
 const getProfilePicture = (profilePicture) => {
   if (!profilePicture) return "/default-profile.png";
-  return profilePicture.startsWith("http")
-    ? profilePicture
-    : `${baseURL}/uploads/${profilePicture}`;
+  if (profilePicture.startsWith("http")) return profilePicture;
+
+  const filename = profilePicture.split("/").pop();
+  return `${baseURL}/uploads/${filename}`;
 };
+
 
 
   useEffect(() => {

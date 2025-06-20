@@ -21,7 +21,6 @@ export const logoutUser = createAsyncThunk("auth/logoutUser", async (_, { reject
 const getStoredUserData = () => {
   try {
     const stored = JSON.parse(localStorage.getItem("userData"));
-    console.log("Stored user data on load:", stored);
     if (stored?.accessToken && stored.user) {
       return {
         user: stored.user,
