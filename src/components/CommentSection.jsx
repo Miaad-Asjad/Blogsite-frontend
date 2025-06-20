@@ -85,11 +85,11 @@ const CommentSection = ({ blogId }) => {
 
 const getProfilePicture = (profilePicture) => {
   if (!profilePicture) return "/default-profile.png";
-  if (profilePicture.startsWith("http")) return profilePicture;
 
   const filename = profilePicture.split("/").pop();
   return `${baseURL}/uploads/${filename}`;
 };
+
 
 
 
