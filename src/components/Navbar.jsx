@@ -4,8 +4,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { logoutUser } from '../redux/authSlice';
 import { ChevronDown } from 'lucide-react';
-import axios from 'axios';
-import { axiosInstance } from '../utils';
+import  axiosInstance from '../utils/axiosInstance';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
