@@ -159,16 +159,17 @@ const BlogForm = ({
         />
 
         {filePreview && (
-          <img
-            src={
-              filePreview.startsWith("blob:")
-                ? filePreview
-                : `${imageBaseURL}/uploads/${filePreview}`
-            }
-            alt="Preview"
-            className="w-full h-52 object-cover rounded-md border"
-          />
-        )}
+  <img
+    src={
+      filePreview.startsWith("blob:")
+        ? filePreview
+        : `${imageBaseURL}/uploads/${formData.image.name}`
+    }
+    alt="Preview"
+    className="w-full h-52 object-cover rounded-md border"
+  />
+)}
+
 
         <button
           type="submit"
