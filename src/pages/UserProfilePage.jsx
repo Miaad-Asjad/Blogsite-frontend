@@ -11,7 +11,10 @@ const UserProfilePage = () => {
   const [loading, setLoading] = useState(true);
   const [editMode, setEditMode] = useState(false);
 
-  const baseURL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+  const baseURL =
+    window.location.hostname === 'localhost'
+      ? 'http://localhost:5000'
+      : import.meta.env.VITE_API_BASE_URL;
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -85,7 +88,9 @@ const UserProfilePage = () => {
               <h2 className="text-3xl font-bold text-gray-800">{user.name}</h2>
               <p className="text-gray-500">@{user.username}</p>
               <p className="text-gray-500">{user.email}</p>
-              <p className="text-sm text-gray-400 mt-1">Blogs Published: {blogs.length}</p>
+              <p className="text-sm text-gray-400 mt-1">
+                Blogs Published: {blogs.length}
+              </p>
               <button
                 onClick={() => setEditMode(true)}
                 className="mt-3 bg-blue-600 text-white px-4 py-1 rounded hover:bg-blue-700"

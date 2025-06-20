@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axiosInstance from "../utils/axiosInstance";
 
 const EditProfileForm = ({ user, onProfileUpdated }) => {
@@ -8,13 +8,25 @@ const EditProfileForm = ({ user, onProfileUpdated }) => {
     profilePicture: null,
   });
 
+  const [preview, setPreview] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+  useEffect(() => {
+    if (user.profilePicture && typeof user.profilePicture === "string") {
+      const imageUrl = user.profilePicture.startsWith("http")
+        ? user.profilePicture
+        : `${import.meta.env.VITE_API_BASE_URL}/uploads/${user.profilePicture}`;
+      setPreview(imageUrl);
+    }
+  }, [user.profilePicture]);
+
   const handleChange = (e) => {
     const { name, value, files } = e.target;
-    if (name === "profilePicture") {
+    if (name === "profilePicture" && files.length > 0) {
       setFormData({ ...formData, profilePicture: files[0] });
+      const fileURL = URL.createObjectURL(files[0]);
+      setPreview(fileURL);
     } else {
       setFormData({ ...formData, [name]: value });
     }
@@ -40,7 +52,7 @@ const EditProfileForm = ({ user, onProfileUpdated }) => {
         withCredentials: true,
       });
 
-      onProfileUpdated(res.data); 
+      onProfileUpdated(res.data);
     } catch (err) {
       console.error("Error updating profile:", err);
       setError(err?.response?.data?.message || "Something went wrong");
@@ -51,70 +63,78 @@ const EditProfileForm = ({ user, onProfileUpdated }) => {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6 mt-6 text-left">
-  {error && <p className="text-red-500">{error}</p>}
+      {error && <p className="text-red-500">{error}</p>}
 
-  <div>
-    <label className="block text-sm font-medium text-gray-700 text-left">Name</label>
-    <input
-      type="text"
-      name="name"
-      value={formData.name}
-      onChange={handleChange}
-      className="mt-1 block w-full border border-gray-300 rounded px-3 py-2"
-      required
-    />
-  </div>
+      <div>
+        <label className="block text-sm font-medium text-gray-700">Name</label>
+        <input
+          type="text"
+          name="name"
+          value={formData.name}
+          onChange={handleChange}
+          className="mt-1 block w-full border border-gray-300 rounded px-3 py-2"
+          required
+        />
+      </div>
 
-  <div>
-    <label className="block text-sm font-medium text-gray-700 text-left">Email</label>
-    <input
-      type="email"
-      name="email"
-      value={formData.email}
-      onChange={handleChange}
-      className="mt-1 block w-full border border-gray-300 rounded px-3 py-2"
-      required
-    />
-  </div>
+      <div>
+        <label className="block text-sm font-medium text-gray-700">Email</label>
+        <input
+          type="email"
+          name="email"
+          value={formData.email}
+          onChange={handleChange}
+          className="mt-1 block w-full border border-gray-300 rounded px-3 py-2"
+          required
+        />
+      </div>
 
-  <div>
-    <label className="block text-sm font-medium text-gray-700 text-left mb-1">
-      Profile Picture
-    </label>
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1">
+          Profile Picture
+        </label>
 
-    <label
-      htmlFor="profilePicture"
-      className="inline-block bg-blue-600 text-white px-4 py-2 rounded cursor-pointer hover:bg-blue-700 transition"
-    >
-      Choose File
-    </label>
+        <label
+          htmlFor="profilePicture"
+          className="inline-block bg-blue-600 text-white px-4 py-2 rounded cursor-pointer hover:bg-blue-700 transition"
+        >
+          Choose File
+        </label>
 
-    <input
-      id="profilePicture"
-      type="file"
-      name="profilePicture"
-      accept="image/*"
-      onChange={handleChange}
-      className="hidden"
-    />
+        <input
+          id="profilePicture"
+          type="file"
+          name="profilePicture"
+          accept="image/*"
+          onChange={handleChange}
+          className="hidden"
+        />
 
-    {formData.profilePicture && (
-      <p className="mt-2 text-sm text-gray-600">
-        Selected: {formData.profilePicture.name}
-      </p>
-    )}
-  </div>
+        {formData.profilePicture && (
+          <p className="mt-2 text-sm text-gray-600">
+            Selected: {formData.profilePicture.name}
+          </p>
+        )}
 
-  <button
-    type="submit"
-    disabled={loading}
-    className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
-  >
-    {loading ? "Updating..." : "Update Profile"}
-  </button>
-</form>
+        {preview && (
+          <img
+            src={preview}
+            alt="Preview"
+            className="mt-3 w-24 h-24 object-cover rounded-full border"
+          />
+        )}
+      </div>
 
+      <button
+        type="submit"
+        disabled={loading}
+        className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+      >
+        {loading ? "Updating..." : "Update Profile"}
+      </button>
+    </form>
   );
 };
 
 export default EditProfileForm;
+

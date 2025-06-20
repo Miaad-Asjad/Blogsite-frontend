@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Editor } from "@tinymce/tinymce-react";
-import  axiosInstance  from "../utils/axiosInstance";
-
+import axiosInstance from "../utils/axiosInstance";
 
 const BlogForm = ({
   formData,
@@ -16,6 +15,11 @@ const BlogForm = ({
   const [loadingCategories, setLoadingCategories] = useState(false);
   const [error, setError] = useState("");
 
+  const isLocalhost = window.location.hostname === "localhost";
+  const imageBaseURL = isLocalhost
+    ? "http://localhost:5000"
+    : import.meta.env.VITE_API_BASE_URL;
+
   useEffect(() => {
     console.log("🧪 TinyMCE API KEY:", import.meta.env.VITE_TINYMCE_API_KEY);
   }, []);
@@ -27,8 +31,8 @@ const BlogForm = ({
         const res = await axiosInstance.get("/api/categories");
         setCategories(res.data);
       } catch (error) {
-  console.error("Category fetch error:", error);
-  setError("Failed to load categories. Please try again later.");
+        console.error("Category fetch error:", error);
+        setError("Failed to load categories. Please try again later.");
       } finally {
         setLoadingCategories(false);
       }
@@ -88,7 +92,6 @@ const BlogForm = ({
 
         <Editor
           apiKey={import.meta.env.VITE_TINYMCE_API_KEY}
-          
           value={formData.description}
           onEditorChange={(content) =>
             setFormData((prev) => ({ ...prev, description: content }))
@@ -157,7 +160,11 @@ const BlogForm = ({
 
         {filePreview && (
           <img
-            src={filePreview}
+            src={
+              filePreview.startsWith("blob:")
+                ? filePreview
+                : `${imageBaseURL}/uploads/${filePreview}`
+            }
             alt="Preview"
             className="w-full h-52 object-cover rounded-md border"
           />
