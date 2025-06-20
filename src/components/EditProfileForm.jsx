@@ -12,14 +12,16 @@ const EditProfileForm = ({ user, onProfileUpdated }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+  const baseURL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+
   useEffect(() => {
     if (user.profilePicture && typeof user.profilePicture === "string") {
       const imageUrl = user.profilePicture.startsWith("http")
         ? user.profilePicture
-        : `${import.meta.env.VITE_API_BASE_URL}/uploads/${user.profilePicture}`;
+        : `${baseURL}/uploads/${user.profilePicture}`;
       setPreview(imageUrl);
     }
-  }, [user.profilePicture]);
+  }, [user.profilePicture, baseURL]);
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;

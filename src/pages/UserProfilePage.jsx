@@ -11,10 +11,7 @@ const UserProfilePage = () => {
   const [loading, setLoading] = useState(true);
   const [editMode, setEditMode] = useState(false);
 
-  const baseURL =
-    window.location.hostname === 'localhost'
-      ? 'http://localhost:5000'
-      : import.meta.env.VITE_API_BASE_URL;
+  const baseURL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -37,9 +34,8 @@ const UserProfilePage = () => {
 
   const getProfileImageURL = () => {
     if (!user?.profilePicture) return '/default-profile.png';
-    return user.profilePicture.startsWith('http')
-      ? user.profilePicture
-      : `${baseURL}/uploads/${user.profilePicture}`;
+    if (user.profilePicture.startsWith('http')) return user.profilePicture;
+    return `${baseURL}/uploads/${user.profilePicture}`;
   };
 
   const handleProfileUpdated = (updatedUserData) => {

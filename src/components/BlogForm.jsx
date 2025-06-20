@@ -20,9 +20,6 @@ const BlogForm = ({
     ? "http://localhost:5000"
     : import.meta.env.VITE_API_BASE_URL;
 
-  useEffect(() => {
-    console.log("🧪 TinyMCE API KEY:", import.meta.env.VITE_TINYMCE_API_KEY);
-  }, []);
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -71,9 +68,8 @@ const BlogForm = ({
     >
       {formStatus?.message && (
         <div
-          className={`text-center font-medium text-sm mb-4 ${
-            formStatus.type === "success" ? "text-green-600" : "text-red-600"
-          }`}
+          className={`text-center font-medium text-sm mb-4 ${formStatus.type === "success" ? "text-green-600" : "text-red-600"
+            }`}
         >
           {formStatus.message}
         </div>
@@ -159,16 +155,16 @@ const BlogForm = ({
         />
 
         {filePreview && (
-  <img
-    src={
-      filePreview.startsWith("blob:")
-        ? filePreview
-        : `${imageBaseURL}/uploads/${formData.image.name}`
-    }
-    alt="Preview"
-    className="w-full h-52 object-cover rounded-md border"
-  />
-)}
+          <img
+            src={
+              filePreview.startsWith("blob:")
+                ? filePreview
+                : `${imageBaseURL}/uploads/${formData.image.name}`
+            }
+            alt="Preview"
+            className="w-full h-52 object-cover rounded-md border"
+          />
+        )}
 
 
         <button
