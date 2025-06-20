@@ -4,7 +4,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { logoutUser } from '../redux/authSlice';
 import { ChevronDown } from 'lucide-react';
-import  axiosInstance from '../utils/axiosInstance';
+import axiosInstance from '../utils/axiosInstance';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -41,14 +41,14 @@ const Navbar = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const res = await axiosInstance.get(`/api/categories`)
+        const res = await axiosInstance.get('/api/categories');
         setCategories(res.data || []);
       } catch (err) {
         console.error('Failed to fetch categories:', err);
       }
     };
     fetchCategories();
-  }, [baseURL]);
+  }, []);
 
   useEffect(() => {
     setCategoryOpen(false);
@@ -57,9 +57,9 @@ const Navbar = () => {
 
   const getProfileImageURL = (user) => {
     if (!user?.profilePicture) return '/default-profile.png';
-    return user.profilePicture.startsWith('http')
-      ? user.profilePicture
-      : `${baseURL}/uploads/${user.profilePicture}`;
+
+    const filename = user.profilePicture.split('/').pop();
+    return `${baseURL}/uploads/${filename}`;
   };
 
   const renderProfileImage = () => (
@@ -224,5 +224,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-
-
