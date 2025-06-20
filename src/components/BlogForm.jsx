@@ -17,6 +17,10 @@ const BlogForm = ({
   const [error, setError] = useState("");
 
   useEffect(() => {
+    console.log("🧪 TinyMCE API KEY:", import.meta.env.VITE_TINYMCE_API_KEY);
+  }, []);
+
+  useEffect(() => {
     const fetchCategories = async () => {
       try {
         setLoadingCategories(true);
@@ -84,6 +88,7 @@ const BlogForm = ({
 
         <Editor
           apiKey={import.meta.env.VITE_TINYMCE_API_KEY}
+          
           value={formData.description}
           onEditorChange={(content) =>
             setFormData((prev) => ({ ...prev, description: content }))
