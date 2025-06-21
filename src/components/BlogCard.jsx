@@ -13,6 +13,7 @@ const BlogCard = ({ blog }) => {
       whileHover={{ scale: 1.02 }}
     >
       <Link to={`/blogs/${_id}`} className="flex flex-col h-full">
+        {/* Image */}
         <div className="relative w-full h-48 sm:h-56 md:h-64 lg:h-48 xl:h-56 overflow-hidden rounded-t-2xl">
           <img
             src={imageURL}
@@ -25,21 +26,25 @@ const BlogCard = ({ blog }) => {
           />
         </div>
 
-        <div className="p-4 flex flex-col flex-grow">
-          <p className="text-xs text-blue-600 font-semibold mb-2 uppercase tracking-wide">
-            {category?.name || "Uncategorized"}
-          </p>
+     
+        <div className="p-4 flex flex-col justify-between flex-grow">
+          <div className="flex flex-col gap-2 mb-4">
+            <p className="text-xs text-blue-600 font-semibold uppercase tracking-wide">
+              {category?.name || "Uncategorized"}
+            </p>
 
-          <h3 className="text-lg font-semibold mb-2 line-clamp-2 text-gray-900">
-            {title}
-          </h3>
+            <h3 className="text-lg font-semibold line-clamp-2 text-gray-900 min-h-[3rem]">
+              {title}
+            </h3>
 
-          <p
-            className="text-sm text-gray-700 mb-4 line-clamp-3"
-            dangerouslySetInnerHTML={{ __html: description }}
-          />
+            <p
+              className="text-sm text-gray-700 line-clamp-3 min-h-[4.5rem]"
+              dangerouslySetInnerHTML={{ __html: description }}
+            />
+          </div>
 
-          <div className="mt-auto flex justify-between items-center text-xs text-gray-400">
+          
+          <div className="flex justify-between items-center text-xs text-gray-400 mt-auto">
             <span>{author?.name || "Unknown author"}</span>
             <span>{new Date(createdAt).toLocaleDateString()}</span>
           </div>
