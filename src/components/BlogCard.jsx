@@ -26,24 +26,23 @@ const BlogCard = ({ blog }) => {
           />
         </div>
 
-     
+       
         <div className="p-4 flex flex-col justify-between flex-grow">
           <div className="flex flex-col gap-2 mb-4">
             <p className="text-xs text-blue-600 font-semibold uppercase tracking-wide">
               {category?.name || "Uncategorized"}
             </p>
 
-            <h3 className="text-lg font-semibold line-clamp-2 text-gray-900 min-h-[3rem]">
+            <h3 className="text-lg font-semibold text-gray-900 line-clamp-2 leading-[1.4] min-h-[2.8rem]">
               {title}
             </h3>
 
             <p
-              className="text-sm text-gray-700 line-clamp-3 min-h-[4.5rem]"
+              className="text-sm text-gray-700 line-clamp-3 leading-[1.5] min-h-[4.5rem] overflow-hidden"
               dangerouslySetInnerHTML={{ __html: description }}
             />
           </div>
 
-          
           <div className="flex justify-between items-center text-xs text-gray-400 mt-auto">
             <span>{author?.name || "Unknown author"}</span>
             <span>{new Date(createdAt).toLocaleDateString()}</span>
