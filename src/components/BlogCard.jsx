@@ -2,9 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useSelector } from "react-redux";
 import axiosInstance from "../utils/axiosInstance";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { FaEdit, FaTrash } from "react-icons/fa";
-
+import { FaEdit, FaTrash } from "react-icons/fa"; 
 
 const BlogCard = ({ blog, showActions = false }) => {
   const { _id, title, description, image, category, author, createdAt } = blog;
@@ -69,7 +67,6 @@ const BlogCard = ({ blog, showActions = false }) => {
             <span>{new Date(createdAt).toLocaleDateString()}</span>
           </div>
 
-
           {showActions && isAuthor && (
             <div className="mt-4 flex gap-4 text-sm">
               <button
@@ -79,17 +76,16 @@ const BlogCard = ({ blog, showActions = false }) => {
                 }}
                 className="text-blue-600 hover:underline flex items-center gap-1"
               >
-                <FontAwesomeIcon icon={FaEdit} /> 
+                <FaEdit /> Edit
               </button>
               <button
                 onClick={handleDelete}
                 className="text-red-500 hover:underline flex items-center gap-1"
               >
-                <FontAwesomeIcon icon={FaTrash} />
+                <FaTrash /> Delete
               </button>
             </div>
           )}
-
         </div>
       </Link>
     </motion.div>
@@ -97,3 +93,4 @@ const BlogCard = ({ blog, showActions = false }) => {
 };
 
 export default BlogCard;
+
