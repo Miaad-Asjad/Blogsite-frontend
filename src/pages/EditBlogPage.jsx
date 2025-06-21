@@ -62,7 +62,7 @@ const EditBlogPage = () => {
 
   return (
     <div className="py-10 px-4 max-w-4xl mx-auto">
-      <h1 className="text-2xl font-bold text-blue-600 mb-6">Edit Blog</h1>
+      <h1 className="text-2xl font-bold text-blue-600 mb-6 text-center">Edit Blog</h1>
 
       <BlogForm
         formData={formData}
