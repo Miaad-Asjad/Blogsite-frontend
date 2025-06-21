@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import axiosInstance from '../utils/axiosInstance'; 
+import axiosInstance from '../utils/axiosInstance';
 import CategoriesList from '../components/CategoriesList';
 import BlogCard from '../components/BlogCard';
 import { motion } from 'framer-motion';
@@ -70,22 +70,22 @@ const HomePage = () => {
               Recent Blogs
             </motion.h2>
 
-            {/* ✅ Updated grid structure */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+            {/* Blog grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12 auto-rows-fr">
               {recentBlogs.map((blog, index) => (
-                <div key={blog._id} className="h-full">
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.4, delay: index * 0.1 }}
-                    className="h-full"
-                  >
-                    <BlogCard blog={blog} />
-                  </motion.div>
-                </div>
+                <motion.div
+                  key={blog._id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, delay: index * 0.1 }}
+                  className="h-full"
+                >
+                  <BlogCard blog={blog} />
+                </motion.div>
               ))}
             </div>
 
+            {/* Categories section */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}

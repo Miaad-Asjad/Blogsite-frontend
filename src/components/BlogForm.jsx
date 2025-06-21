@@ -1,181 +1,52 @@
-import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Editor } from "@tinymce/tinymce-react";
-import axiosInstance from "../utils/axiosInstance";
 
-const BlogForm = ({
-  formData,
-  setFormData,
-  handleSubmit,
-  submitText,
-  formStatus,
-}) => {
-  const [filePreview, setFilePreview] = useState("");
-  const [categories, setCategories] = useState([]);
-  const [loadingCategories, setLoadingCategories] = useState(false);
-  const [error, setError] = useState("");
+const BlogCard = ({ blog }) => {
+  const { _id, title, description, image, category, author, createdAt } = blog;
 
-  const isLocalhost = window.location.hostname === "localhost";
-  const imageBaseURL = isLocalhost
-    ? "http://localhost:5000"
-    : import.meta.env.VITE_API_BASE_URL;
-
-
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        setLoadingCategories(true);
-        const res = await axiosInstance.get("/api/categories");
-        setCategories(res.data);
-      } catch (error) {
-        console.error("Category fetch error:", error);
-        setError("Failed to load categories. Please try again later.");
-      } finally {
-        setLoadingCategories(false);
-      }
-    };
-    fetchCategories();
-  }, []);
-
-  useEffect(() => {
-    if (formData.image) {
-      const url = URL.createObjectURL(formData.image);
-      setFilePreview(url);
-      return () => URL.revokeObjectURL(url);
-    }
-    setFilePreview("");
-  }, [formData.image]);
-
-  const handleChange = (e) => {
-    const { name, value, files } = e.target;
-    if (name === "image" && files.length > 0) {
-      const file = files[0];
-      if (file.size > 2 * 1024 * 1024) {
-        return;
-      }
-      setFormData((prev) => ({ ...prev, image: file }));
-    } else {
-      setFormData((prev) => ({ ...prev, [name]: value }));
-    }
-  };
+  const baseURL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
+  const imageURL = image?.startsWith("http") ? image : `${baseURL}/uploads/${image}`;
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: -20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-      className="w-full max-w-2xl mx-auto p-4 sm:p-6 bg-white shadow-md rounded-md"
+      className="bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300 flex flex-col h-full"
+      whileHover={{ scale: 1.02 }}
     >
-      {formStatus?.message && (
-        <div
-          className={`text-center font-medium text-sm mb-4 ${formStatus.type === "success" ? "text-green-600" : "text-red-600"
-            }`}
-        >
-          {formStatus.message}
-        </div>
-      )}
-
-      <form onSubmit={handleSubmit} className="space-y-6">
-        <input
-          type="text"
-          name="title"
-          value={formData.title}
-          onChange={handleChange}
-          placeholder="Enter title"
-          required
-          className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-
-        <Editor
-          apiKey={import.meta.env.VITE_TINYMCE_API_KEY}
-          value={formData.description}
-          onEditorChange={(content) =>
-            setFormData((prev) => ({ ...prev, description: content }))
-          }
-          init={{
-            height: 300,
-            menubar: true,
-            plugins: [
-              "advlist",
-              "autolink",
-              "lists",
-              "link",
-              "image",
-              "charmap",
-              "preview",
-              "anchor",
-              "searchreplace",
-              "visualblocks",
-              "code",
-              "fullscreen",
-              "insertdatetime",
-              "media",
-              "table",
-              "help",
-              "wordcount",
-            ],
-            toolbar:
-              "undo redo | formatselect | bold italic | " +
-              "alignleft aligncenter alignright alignjustify | " +
-              "bullist numlist outdent indent | image | removeformat | help",
-            images_upload_url: `${import.meta.env.VITE_API_BASE_URL}/blogs/upload-image`,
-            images_upload_credentials: true,
-            automatic_uploads: true,
-            file_picker_types: "image",
-          }}
-        />
-
-        {loadingCategories ? (
-          <p className="text-gray-500 italic">Loading categories...</p>
-        ) : error ? (
-          <p className="text-red-500">{error}</p>
-        ) : (
-          <select
-            name="category"
-            value={formData.category}
-            onChange={handleChange}
-            required
-            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
-            <option value="">Select Category</option>
-            {categories.map((cat) => (
-              <option key={cat._id} value={cat.slug}>
-                {cat.name}
-              </option>
-            ))}
-          </select>
-        )}
-
-        <input
-          type="file"
-          name="image"
-          accept="image/*"
-          onChange={handleChange}
-          className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:border-0 file:text-sm file:font-semibold file:bg-blue-100 file:text-blue-700 hover:file:bg-blue-200"
-        />
-
-        {filePreview && (
+      <Link to={`/blogs/${_id}`} className="flex flex-col h-full">
+        <div className="relative w-full h-48 sm:h-56 md:h-64 lg:h-48 xl:h-56 overflow-hidden rounded-t-2xl">
           <img
-            src={
-              filePreview.startsWith("blob:")
-                ? filePreview
-                : `${imageBaseURL}/uploads/${formData.image.name}`
-            }
-            alt="Preview"
-            className="w-full h-52 object-cover rounded-md border"
+            src={imageURL}
+            alt={title}
+            className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+            onError={(e) => {
+              e.target.onerror = null;
+              e.target.src = "/default-blog-image.jpg";
+            }}
           />
-        )}
+        </div>
 
+        <div className="p-4 flex flex-col flex-grow">
+          <p className="text-xs text-blue-600 font-semibold mb-2 uppercase tracking-wide">
+            {category?.name || "Uncategorized"}
+          </p>
 
-        <button
-          type="submit"
-          className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md text-lg font-medium transition duration-200"
-        >
-          {submitText}
-        </button>
-      </form>
+          <h3 className="text-lg font-semibold mb-2 line-clamp-2 text-gray-900">
+            {title}
+          </h3>
+
+          <p
+            className="text-sm text-gray-700 mb-4 line-clamp-3"
+            dangerouslySetInnerHTML={{ __html: description }}
+          />
+
+          <div className="mt-auto flex justify-between items-center text-xs text-gray-400">
+            <span>{author?.name || "Unknown author"}</span>
+            <span>{new Date(createdAt).toLocaleDateString()}</span>
+          </div>
+        </div>
+      </Link>
     </motion.div>
   );
 };
 
-export default BlogForm;
+export default BlogCard;
