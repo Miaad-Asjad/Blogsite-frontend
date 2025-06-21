@@ -13,7 +13,7 @@ const BlogCard = ({ blog }) => {
       whileHover={{ scale: 1.02 }}
     >
       <Link to={`/blogs/${_id}`} className="flex flex-col h-full">
-        {/* Image */}
+        
         <div className="relative w-full h-48 sm:h-56 md:h-64 lg:h-48 xl:h-56 overflow-hidden rounded-t-2xl">
           <img
             src={imageURL}
@@ -26,7 +26,7 @@ const BlogCard = ({ blog }) => {
           />
         </div>
 
-       
+        
         <div className="p-4 flex flex-col justify-between flex-grow">
           <div className="flex flex-col gap-2 mb-4">
             <p className="text-xs text-blue-600 font-semibold uppercase tracking-wide">
@@ -38,7 +38,7 @@ const BlogCard = ({ blog }) => {
             </h3>
 
             <p
-              className="text-sm text-gray-700 line-clamp-3 leading-[1.5] min-h-[4.5rem] overflow-hidden"
+              className="text-sm text-gray-700 line-clamp-3 leading-[1.5] min-h-[4rem] overflow-hidden"
               dangerouslySetInnerHTML={{ __html: description }}
             />
           </div>
