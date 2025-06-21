@@ -1,60 +1,80 @@
-// src/pages/EditBlogPage.jsx
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import axiosInstance from "../utils/axiosInstance";
 import BlogForm from "../components/BlogForm";
-import { useSelector } from "react-redux";
-import Loader from "../components/Loader";
+import axiosInstance from "../utils/axiosInstance";
 
 const EditBlogPage = () => {
-  const { id } = useParams(); // blog ID from URL
+  const { id } = useParams();
   const navigate = useNavigate();
-  const { accessToken } = useSelector((state) => state.auth);
 
-  const [blog, setBlog] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [formData, setFormData] = useState({
+    title: "",
+    description: "",
+    category: "",
+    image: null,
+  });
 
-  const fetchBlog = async () => {
-    try {
-      const { data } = await axiosInstance.get(`/api/blogs/${id}`);
-      setBlog(data);
-    } catch (err) {
-      console.error("Failed to fetch blog:", err);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const [blog, setBlog] = useState(null); 
+  const [formStatus, setFormStatus] = useState(null);
 
   useEffect(() => {
+    const fetchBlog = async () => {
+      try {
+        const res = await axiosInstance.get(`/api/blogs/${id}`);
+        const blogData = res.data;
+
+        setBlog(blogData); 
+
+       
+        setFormData({
+          title: blogData.title,
+          description: blogData.description,
+          category: blogData.category.slug,
+          image: null, 
+        });
+      } catch (err) {
+        console.error("Failed to load blog:", err);
+      }
+    };
+
     fetchBlog();
   }, [id]);
 
-  const handleUpdate = async (formData) => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const data = new FormData();
+    data.append("title", formData.title);
+    data.append("description", formData.description);
+    data.append("category", formData.category);
+    if (formData.image) {
+      data.append("image", formData.image);
+    }
+
     try {
-      await axiosInstance.put(
-        `/api/blogs/${id}`,
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
-      navigate(`/blogs/${id}`);
+      await axiosInstance.put(`/api/blogs/${id}`, data);
+      setFormStatus({ type: "success", message: "Blog updated successfully" });
+      setTimeout(() => navigate(`/blogs/${id}`), 1500);
     } catch (err) {
-      console.error("Error updating blog:", err);
+      setFormStatus({ type: "error", message: "Failed to update blog" });
     }
   };
 
-  if (loading) return <Loader />;
-  if (!blog) return <p className="text-center text-gray-500">Blog not found</p>;
-
   return (
-    <div className="max-w-3xl mx-auto px-4 py-8">
-      <h1 className="text-2xl font-bold mb-4 text-blue-600">Edit Blog</h1>
-      <BlogForm initialData={blog} onSubmit={handleUpdate} />
+    <div className="py-10 px-4 max-w-4xl mx-auto">
+      <h1 className="text-2xl font-bold text-blue-600 mb-6">Edit Blog</h1>
+
+      <BlogForm
+        formData={formData}
+        setFormData={setFormData}
+        handleSubmit={handleSubmit}
+        submitText="Update Blog"
+        formStatus={formStatus}
+        initialData={blog} 
+      />
     </div>
   );
 };
 
 export default EditBlogPage;
+

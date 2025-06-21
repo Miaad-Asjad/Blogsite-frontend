@@ -17,6 +17,7 @@ import CategoryPage from './pages/CategoryPage';
 import AllCategoriesPage from './pages/AllCategoriesPage';
 import VerifyEmailPage from './pages/VerifyEmailPage';
 import UserProfilePage from './pages/UserProfilePage';
+import EditBlogPage from './pages/EditBlogPage';
 
 const App = () => {
   return (
@@ -53,6 +54,8 @@ const App = () => {
             <Route path='/forgot-password' element={<ForgotPassword />} />
             <Route path='/reset-password' element={<ResetPassword />} />
             <Route path='/profile/:userId' element={<UserProfilePage />} /> 
+            <Route path="/blogs/:id/edit" element={<EditBlogPage />} />
+
           </Routes>
         </div>
       </div>

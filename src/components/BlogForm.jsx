@@ -16,18 +16,17 @@ const BlogForm = ({
   const [loadingCategories, setLoadingCategories] = useState(false);
   const [error, setError] = useState("");
 
-  const isLocalhost = window.location.hostname === "localhost";
-  const imageBaseURL = isLocalhost
-    ? "http://localhost:5000"
-    : import.meta.env.VITE_API_BASE_URL;
+  const imageBaseURL =
+    import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
 
+  
   useEffect(() => {
     if (initialData) {
       setFormData({
         title: initialData.title || "",
         description: initialData.description || "",
         category: initialData.category?.slug || "",
-        image: initialData.image || "",
+        image: "", 
       });
 
       if (initialData.image) {
@@ -36,7 +35,6 @@ const BlogForm = ({
     }
   }, [initialData]);
 
- 
   useEffect(() => {
     if (formData.image instanceof File) {
       const url = URL.createObjectURL(formData.image);
@@ -45,7 +43,6 @@ const BlogForm = ({
     }
   }, [formData.image]);
 
-  
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -110,12 +107,27 @@ const BlogForm = ({
             height: 300,
             menubar: true,
             plugins: [
-              "advlist", "autolink", "lists", "link", "image", "charmap", "preview", "anchor",
-              "searchreplace", "visualblocks", "code", "fullscreen", "insertdatetime", "media", "table", "help", "wordcount",
+              "advlist",
+              "autolink",
+              "lists",
+              "link",
+              "image",
+              "charmap",
+              "preview",
+              "anchor",
+              "searchreplace",
+              "visualblocks",
+              "code",
+              "fullscreen",
+              "insertdatetime",
+              "media",
+              "table",
+              "help",
+              "wordcount",
             ],
             toolbar:
               "undo redo | formatselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | image | removeformat | help",
-            images_upload_url: `${import.meta.env.VITE_API_BASE_URL}/blogs/upload-image`,
+            images_upload_url: `${imageBaseURL}/api/blogs/upload-image`,
             images_upload_credentials: true,
             automatic_uploads: true,
             file_picker_types: "image",
