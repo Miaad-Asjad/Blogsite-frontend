@@ -51,7 +51,7 @@ const HomePage = () => {
   return (
     <div className="relative min-h-screen flex flex-col justify-between">
       <div className="px-4 py-8 max-w-7xl mx-auto w-full">
-        {/* Header */}
+      
         <div className="text-center mb-10">
           <h1 className="text-3xl md:text-4xl font-bold text-blue-600">WordSphere - Home</h1>
           <p className="text-gray-600 mt-4 text-base">
@@ -59,7 +59,7 @@ const HomePage = () => {
           </p>
         </div>
 
-        {/* Blogs Section */}
+        
         {loading ? (
           <div className="flex justify-center items-center min-h-[300px]">
             <Loader />
@@ -75,7 +75,8 @@ const HomePage = () => {
               Recent Blogs
             </motion.h2>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12 auto-rows-fr">
+
               {recentBlogs.map((blog, index) => (
                 <motion.div
                   key={blog._id}

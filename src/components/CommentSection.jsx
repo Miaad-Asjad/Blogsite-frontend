@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
-import  axiosInstance  from "../utils/axiosInstance";
+import axiosInstance from "../utils/axiosInstance";
 import moment from "moment";
 
 const baseURL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
@@ -83,12 +83,12 @@ const CommentSection = ({ blogId }) => {
   };
 
 
-const getProfilePicture = (profilePicture) => {
-  if (!profilePicture) return "/default-profile.png";
+  const getProfilePicture = (profilePicture) => {
+    if (!profilePicture) return "/default-profile.png";
 
-  const filename = profilePicture.split("/").pop();
-  return `${baseURL}/uploads/${filename}`;
-};
+    const filename = profilePicture.split("/").pop();
+    return `${baseURL}/uploads/${filename}`;
+  };
 
 
 
@@ -176,7 +176,7 @@ const getProfilePicture = (profilePicture) => {
                 ) : (
                   <div className="flex justify-between items-start">
                     <p className="text-gray-800">{cmt.comment}</p>
-                    {cmt.user && isOwner && (
+                    {cmt.user && isOwner && moment().diff(moment(cmt.createdAt), 'hours') < 1 && (
                       <button
                         onClick={() => startEdit(cmt._id, cmt.comment)}
                         className="text-blue-600 text-sm hover:underline ml-4"
