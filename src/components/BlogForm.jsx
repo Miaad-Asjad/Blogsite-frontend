@@ -9,6 +9,7 @@ const BlogForm = ({
   handleSubmit,
   submitText,
   formStatus,
+  initialData = null,
 }) => {
   const [filePreview, setFilePreview] = useState("");
   const [categories, setCategories] = useState([]);
@@ -20,7 +21,31 @@ const BlogForm = ({
     ? "http://localhost:5000"
     : import.meta.env.VITE_API_BASE_URL;
 
+  useEffect(() => {
+    if (initialData) {
+      setFormData({
+        title: initialData.title || "",
+        description: initialData.description || "",
+        category: initialData.category?.slug || "",
+        image: initialData.image || "",
+      });
 
+      if (initialData.image) {
+        setFilePreview(`${imageBaseURL}/uploads/${initialData.image}`);
+      }
+    }
+  }, [initialData]);
+
+ 
+  useEffect(() => {
+    if (formData.image instanceof File) {
+      const url = URL.createObjectURL(formData.image);
+      setFilePreview(url);
+      return () => URL.revokeObjectURL(url);
+    }
+  }, [formData.image]);
+
+  
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -28,8 +53,7 @@ const BlogForm = ({
         const res = await axiosInstance.get("/api/categories");
         setCategories(res.data);
       } catch (error) {
-        console.error("Category fetch error:", error);
-        setError("Failed to load categories. Please try again later.");
+        setError("Failed to load categories.");
       } finally {
         setLoadingCategories(false);
       }
@@ -37,22 +61,11 @@ const BlogForm = ({
     fetchCategories();
   }, []);
 
-  useEffect(() => {
-    if (formData.image) {
-      const url = URL.createObjectURL(formData.image);
-      setFilePreview(url);
-      return () => URL.revokeObjectURL(url);
-    }
-    setFilePreview("");
-  }, [formData.image]);
-
   const handleChange = (e) => {
     const { name, value, files } = e.target;
     if (name === "image" && files.length > 0) {
       const file = files[0];
-      if (file.size > 2 * 1024 * 1024) {
-        return;
-      }
+      if (file.size > 2 * 1024 * 1024) return;
       setFormData((prev) => ({ ...prev, image: file }));
     } else {
       setFormData((prev) => ({ ...prev, [name]: value }));
@@ -68,8 +81,9 @@ const BlogForm = ({
     >
       {formStatus?.message && (
         <div
-          className={`text-center font-medium text-sm mb-4 ${formStatus.type === "success" ? "text-green-600" : "text-red-600"
-            }`}
+          className={`text-center font-medium text-sm mb-4 ${
+            formStatus.type === "success" ? "text-green-600" : "text-red-600"
+          }`}
         >
           {formStatus.message}
         </div>
@@ -96,28 +110,11 @@ const BlogForm = ({
             height: 300,
             menubar: true,
             plugins: [
-              "advlist",
-              "autolink",
-              "lists",
-              "link",
-              "image",
-              "charmap",
-              "preview",
-              "anchor",
-              "searchreplace",
-              "visualblocks",
-              "code",
-              "fullscreen",
-              "insertdatetime",
-              "media",
-              "table",
-              "help",
-              "wordcount",
+              "advlist", "autolink", "lists", "link", "image", "charmap", "preview", "anchor",
+              "searchreplace", "visualblocks", "code", "fullscreen", "insertdatetime", "media", "table", "help", "wordcount",
             ],
             toolbar:
-              "undo redo | formatselect | bold italic | " +
-              "alignleft aligncenter alignright alignjustify | " +
-              "bullist numlist outdent indent | image | removeformat | help",
+              "undo redo | formatselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | image | removeformat | help",
             images_upload_url: `${import.meta.env.VITE_API_BASE_URL}/blogs/upload-image`,
             images_upload_credentials: true,
             automatic_uploads: true,
@@ -156,16 +153,11 @@ const BlogForm = ({
 
         {filePreview && (
           <img
-            src={
-              filePreview.startsWith("blob:")
-                ? filePreview
-                : `${imageBaseURL}/uploads/${formData.image.name}`
-            }
+            src={filePreview}
             alt="Preview"
             className="w-full h-52 object-cover rounded-md border"
           />
         )}
-
 
         <button
           type="submit"

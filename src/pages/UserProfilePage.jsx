@@ -38,7 +38,7 @@ const UserProfilePage = () => {
   const getProfileImageURL = () => {
     if (!user?.profilePicture) return '/default-profile.png';
 
-    const filename = user.profilePicture.split('/').pop(); 
+    const filename = user.profilePicture.split('/').pop();
     return `${baseURL}/uploads/${filename}`;
   };
 
@@ -124,8 +124,9 @@ const UserProfilePage = () => {
         ) : (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {blogs.map((blog) => (
-              <BlogCard key={blog._id} blog={blog} />
+              <BlogCard key={blog._id} blog={blog} showActions={true} />
             ))}
+
           </div>
         )}
       </div>
