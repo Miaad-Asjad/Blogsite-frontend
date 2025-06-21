@@ -79,13 +79,13 @@ const BlogCard = ({ blog, showActions = false }) => {
                 }}
                 className="text-blue-600 hover:underline flex items-center gap-1"
               >
-                <FontAwesomeIcon icon={FaEdit} /> Edit
+                <FontAwesomeIcon icon={FaEdit} /> 
               </button>
               <button
                 onClick={handleDelete}
                 className="text-red-500 hover:underline flex items-center gap-1"
               >
-                <FontAwesomeIcon icon={FaTrash} /> Delete
+                <FontAwesomeIcon icon={FaTrash} />
               </button>
             </div>
           )}
