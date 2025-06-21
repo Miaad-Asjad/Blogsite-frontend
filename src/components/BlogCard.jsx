@@ -9,7 +9,7 @@ const BlogCard = ({ blog }) => {
 
   return (
     <motion.div
-      className="bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300 flex flex-col"
+      className="bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300 flex flex-col h-full"
       whileHover={{ scale: 1.02 }}
     >
       <Link to={`/blogs/${_id}`} className="flex flex-col h-full">
