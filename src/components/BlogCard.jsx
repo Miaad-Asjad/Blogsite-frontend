@@ -30,10 +30,10 @@ const BlogCard = ({ blog, showActions = false }) => {
 
   return (
     <motion.div
-      className="bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300 flex flex-col h-full"
+      className="bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300 flex flex-col h-full min-h-[460px] max-h-[500px]"
       whileHover={{ scale: 1.02 }}
     >
-      {/* Image - NOT wrapped in Link */}
+      {/* Image */}
       <div className="relative w-full h-52 md:h-60 xl:h-64 overflow-hidden rounded-t-2xl">
         <img
           src={imageURL}
@@ -46,9 +46,9 @@ const BlogCard = ({ blog, showActions = false }) => {
         />
       </div>
 
-      {/* Blog content — wrapped in Link */}
+      {/* Content */}
       <div className="p-4 flex flex-col justify-between flex-grow">
-        <Link to={`/blogs/${_id}`} className="flex flex-col gap-2 mb-4 flex-grow">
+        <Link to={`/blogs/${_id}`} className="flex flex-col gap-2 mb-4 flex-grow overflow-hidden">
           <p className="text-xs text-blue-600 font-semibold uppercase tracking-wide">
             {category?.name || "Uncategorized"}
           </p>
@@ -57,19 +57,19 @@ const BlogCard = ({ blog, showActions = false }) => {
             {title}
           </h3>
 
-          <p
-            className="text-sm text-gray-700 line-clamp-3 leading-[1.5] min-h-[4rem] overflow-hidden"
-            dangerouslySetInnerHTML={{ __html: description }}
-          />
+          {/* Description wrapped inside div for better Safari support */}
+          <div className="text-sm text-gray-700 line-clamp-3 leading-[1.5] max-h-[4.5rem] overflow-hidden">
+            <div dangerouslySetInnerHTML={{ __html: description }} />
+          </div>
         </Link>
 
-        {/* Author & Date */}
+        {/* Footer Info */}
         <div className="flex justify-between items-center text-xs text-gray-400 mt-auto">
           <span>{author?.name || "Unknown author"}</span>
           <span>{new Date(createdAt).toLocaleDateString()}</span>
         </div>
 
-        {/* Edit/Delete Buttons */}
+        {/* Actions */}
         {showActions && isAuthor && (
           <div className="mt-4 flex gap-4 text-sm">
             <button
