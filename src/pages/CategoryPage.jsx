@@ -9,13 +9,15 @@ const CategoryPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  
   const formatSlug = (slug) =>
     slug
       .replace(/-/g, " ")
       .replace(/\b\w/g, (char) => char.toUpperCase());
 
   useEffect(() => {
+    // ✅ Scroll to top when category changes
+    window.scrollTo(0, 0);
+
     if (!slug) {
       setError("Invalid category URL.");
       setLoading(false);

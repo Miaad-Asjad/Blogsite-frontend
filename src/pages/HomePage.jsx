@@ -15,6 +15,8 @@ const HomePage = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // ✅ Scroll to top when HomePage loads
+    window.scrollTo(0, 0);
     document.title = 'WordSphere | Home';
 
     const fetchData = async () => {
@@ -70,7 +72,6 @@ const HomePage = () => {
               Recent Blogs
             </motion.h2>
 
-            {/* Blog grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12 auto-rows-fr">
               {recentBlogs.map((blog, index) => (
                 <motion.div
@@ -85,7 +86,6 @@ const HomePage = () => {
               ))}
             </div>
 
-            {/* Categories section */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
