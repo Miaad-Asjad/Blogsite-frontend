@@ -74,7 +74,7 @@ const UserProfilePage = () => {
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-10">
-      {/* User Info */}
+      
       <div className="flex flex-col md:flex-row items-center gap-6 mb-10 border-b pb-6">
         <img
           src={getProfileImageURL()}

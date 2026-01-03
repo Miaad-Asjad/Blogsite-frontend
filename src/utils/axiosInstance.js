@@ -4,7 +4,7 @@ const baseURL = import.meta.env.VITE_API_BASE_URL;
 
 
 if (import.meta.env.DEV) {
-  console.log('🌐 API Base URL:', baseURL);
+  console.log('API Base URL:', baseURL);
 }
 
 

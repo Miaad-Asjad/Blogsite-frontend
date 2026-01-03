@@ -15,7 +15,7 @@ const HomePage = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // ✅ Scroll to top when HomePage loads
+    
     window.scrollTo(0, 0);
     document.title = 'WordSphere | Home';
 
